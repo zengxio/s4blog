@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form action="/wangzhe.html" method="POST" novalidate>
+    {% csrf_token %}
+    <p>
+        文章标题
+        {{ obj.title }}
+    </p>
+
+    <div>
+        <div>文章内容</div>
+        <div>
+{#            <textarea id="i1" name="content"></textarea>#}
+            {{ obj.content }}
+        </div>
+    </div>
+    <input type="submit" value="提交">
+</form>
+
+
+
+
+<script src="/static/kindeditor-4.1.10/kindeditor-all.js"></script>
+<script>
+    KindEditor.create("#i1",{
+        width:'700px',
+        height:'300px',
+{#        items:['source', '|', 'undo', 'redo', '|', 'preview', 'print', 'template', 'code', 'cut', 'copy', 'paste',#}
+{#        'plainpaste', 'wordpaste', '|', 'justifyleft', 'justifycenter', 'justifyright',#}
+{#        'justifyfull', 'insertorderedlist'#}
+{#        ], //显示的功能#}
+{#        noDisableItems:['undo', 'redo'],#}
+{#        designMode :false,   //这两个参数组合实现，显示功能为不可用#}
+{#        htmlTags:{#} //这些都是默认值，过滤文本内的一部分标签可以使用。但是还是可以发送到后台的。对爬虫没有用，只是基于浏览器访问#}
+        resizeType:1, //2或1或0，2时可以拖动改变宽度和高度，1时只能改变高度，0时不能拖动。
+        uploadJson:'/upload_img.html',//上传文件地址,url
+        extraFileUploadParams:{'csrfmiddlewaretoken':'{{ csrf_token }}'},
+        filePostName:'fafafa'  //修改后台获取文件的name信息。默认是imgFile
+    })
+</script>
+</body>
+</html>

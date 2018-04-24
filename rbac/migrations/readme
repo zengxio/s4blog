@@ -1,0 +1,27 @@
+rbac使用方法
+1、登录成功写入session
+from rbac.service import permission_session
+#传userid和request
+permission_session(1,request)
+
+2、公共权限控制，添加认证中间件
+在settings中加入MIDDLEWARE
+'rbac.middleware.md.RbacMiddleware',
+在settings中加入INSTALLED_APPS
+ 'rbac',
+
+ 3、生成菜单
+ from rbac.service import menu
+ menu(user_id,current_url)  ##生成菜单，权限html
+                            #传入user_id，request.path_info
+
+ 4、引入数据库
+ """
+外部关联rbac 模版app数据库
+from rbac.models import User as RbacUser
+class UserInfo(models.Model):
+    nickname=models.CharField(max_length=32)
+    user=models.OneToOneField(RbacUser)
+"""
+
+配置文件config.py配置url白名单

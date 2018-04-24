@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/static/bootstrap-3.3.7-dist/css/bootstrap.css">
+    <link rel="stylesheet" href="/static/css/commons.css">
+</head>
+<body>
+<nav class="navbar navbar-default no-radius">
+  <div class="container">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">老男孩技术论坛</a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+      {% if type_id %}
+        <li><a href="/">全部</a></li>
+      {% else %}
+        <li class="active"><a href="/">全部</a></li>
+      {% endif %}
+          {% for item in type_choices_list %}
+              {% if item.0 == type_id %}
+                <li class="active"><a href="/all/{{ item.0 }}/">{{ item.1 }}</a></li>
+              {% else %}
+                <li><a href="/all/{{ item.0 }}/">{{ item.1 }}</a></li>
+              {% endif %}
+          {% endfor %}
+      </ul>
+
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="/login/">登录</a></li>
+        <li><a href="#">注册</a></li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+<div>
+    <div class="container">
+        <div class="col-md-8">
+            <div class="article-list">
+                <div class="article-item">
+                    <h3 class="art-head"><a>英杰大战黄鳝</a></h3>
+                    <div class="art-body clearfix"> {# clearfix 清除浮动 #}
+                        <a class="left"><img src="/static/imgs/yingjie.jpg" alt=""></a>
+                        整个游戏下来，战场上就是十个一样的东皇太一在战斗，而且玩家玩完一把之后再也不想玩第二次，因为整个战斗场面就像是一群黄鳝在打架，释放技能，看到这画面也是觉得恶心透了。
+{#                        <div style="clear: both"></div>#} {# 和clearfix一样，都是清除浮动 #}
+                    </div>
+                    <div class="art-footer">
+                        <a>
+                            <span class="glyphicon glyphicon-user"></span>
+                            张英杰
+                        </a>
+                    </div>
+                </div>
+                {% for article in article_list %}
+                     <div class="article-item">
+                        <h3 class="art-head"><a>{{ article.title }}</a></h3>
+                        <div class="art-body clearfix"> {# clearfix 清除浮动 #}
+                            <a class="left"><img src="{{ article.blog.user.avatar }}" alt=""></a>
+                            {{ article.summary }}
+                        </div>
+                        <div class="art-footer">
+                            <a>
+                                <span class="glyphicon glyphicon-user"></span>
+                                张英杰
+                            </a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="panel panel-default">
+              <div class="panel-heading">Panel heading without title</div>
+              <div class="panel-body">
+
+                  <p>Panel content</p>
+                  <p>Panel content</p>
+                  <p>Panel content</p>
+                  <p>Panel content</p>
+                  <p>Panel content</p>
+              </div>
+            </div>
+
+            <div class="panel panel-default">
+              <div class="panel-heading">Panel heading without title</div>
+              <div class="panel-body">
+                <p>Panel content</p>
+                <p>Panel content</p>
+                <p>Panel content</p>
+                <p>Panel content</p>
+                <p>Panel content</p>
+              </div>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+</body>
+</html>

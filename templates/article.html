@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        .comment{
+            margin-left: 30px;
+
+        }
+    </style>
+</head>
+<body>
+    <div class="c1">
+        <div class="c11">{{ blog.user.nickname }}</div>
+        <div class="c12">{{ blog.title }}</div>
+    </div>
+    <div class="c2">
+        <h3>分类</h3>
+        <ul>
+            {% for item in category_list %}
+                <li>
+                    <a href="/{{ blog.site }}/category/{{ item.category_id }}/">{{ item.category__title }}({{ item.ct }})</a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="c3">
+        <h3>标签</h3>
+        <ul>
+            {% for item in tag_list %}
+                <li>
+                    <a href="/{{ blog.site }}/tag/{{ item.tag_id }}/">{{ item.tag__title }}({{ item.ct }})</a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div>
+        <h3>时间</h3>
+        <ul>
+            {% for item in date_list %}
+                <li>
+                    <a href="/{{ blog.site }}/date/{{ item.ctime }}/">{{ item.ctime }}({{ item.ct }})</a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div>
+        <h3><a>{{ obj.title }}</a></h3>
+        {{ obj.articledetail.content | safe }}
+    </div>
+    <div>
+        <a onclick="updown(this,{{ obj.nid }},1);">
+            <span>赞</span>
+            <i id="count_num">{{ obj.up_count }}</i>
+        </a>
+        <a onclick="updown(this,{{ obj.nid }},0);">
+            <span>踩</span>
+            <i id="count_num">{{ obj.down_count }}</i>
+        </a>
+    </div>
+
+    <h3>评论</h3>
+{#    {{ comment_str|safe }}#}
+    <div id="commentArea"></div>
+
+    <script src="/static/js/jquery-1.12.4.js"></script>
+
+    <script>
+        /*
+        1.调用对象方法时，通过调用类的prototype中的方法
+        2.正则表达式 /\w+/g
+        3.字符串的replace
+            ''.replace('alex','sb')
+            ''.replace('/\w+/','sb')
+            ''.replace('/\w+/g','sb')
+            ''.replace('/(\w+)/g',function(k,kk){retudn 11;})
+
+        */
+        String.prototype.Format=function (arg) {
+            /*
+            console.log(this); //当前字符串
+            console.log(arg);//传的参数
+            return ,格式化之后获取的新内容
+
+            例子
+                var v="my name is {name} ,age is {age}";
+                var c=v.Format({'name':'alex','age':18});
+                console.log(c)
+
+             前端写正则表达式需要前后写 /
+             () 代表组合
+             g代表全部
+            */
+
+
+            var temp=this.replace(/\{(\w+)\}/g,function(k,kk){
+                return arg[kk];
+            });
+            return temp
+        };
+
+
+        $(function () {
+            //发送ajax请求，并获取所有评论信息
+            //列表
+            //js生成结构
+            $.ajax({
+                url:'/comments-{{ obj.nid }}.html',
+                type:'GET',
+                dataType:'JSON',
+                success:function (arg) {
+                    if(arg.status){
+                        /*一个列表字典*/
+                        console.log(arg.data);
+                        var comment=commentTree(arg.data);
+                        $("#commentArea").append(comment)
+                    }else {
+                        console.log(arg.msg)
+                    }
+                }
+            })
+        });
+
+        function commentTree(commentList) {
+            var comment_str="<div class='comment'>";
+            $.each(commentList,function (k,row) {
+{#                var temp="<div class='content'>"+row.content+"</div>";#}
+                var temp="<div class='content'>{content}</div>".Format({content:row.content});
+                comment_str+=temp;
+                if(row.child.length>0){
+                    comment_str+=commentTree(row.child)
+                }
+            });
+            comment_str+='</div>';
+            return comment_str
+        }
+
+        function updown(ths,nid,val) {
+            $.ajax({
+                url:"/up.html",
+                data:{'val':val,'nid':nid,'csrfmiddlewaretoken':'{{ csrf_token }}'},
+                type:"POST",
+                dataType:"JSON",
+                success:function (arg) {
+                    if (arg.status){
+                        //显示赞或踩的个数+1
+
+                    }else {
+                         //显示错误信息
+                    }
+                }
+
+            })
+        }
+
+
+
+    </script>
+</body>
+</html>

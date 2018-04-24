@@ -1,0 +1,13 @@
+.no-radius{
+    /*永久生效*/
+    border-radius: 0 !important;
+}
+
+.article-list .article-item .art-body img{
+    width: 80px;
+    height: 80px;
+}
+
+.left{
+    float: left;
+}
